@@ -1,0 +1,8 @@
+PROJECT=miscellaneous
+
+GENERATED_EXECUTABLES=bin/ordn_filmliste
+
+GENERATED_SOURCES=
+
+SCRIPTS=
+

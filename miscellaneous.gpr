@@ -1,0 +1,17 @@
+--  O mighty Emacs, please use -*- Ada -*- mode in this lowly file.
+
+with "ada_2005";
+
+project Miscellaneous is
+   for Source_Dirs use ("src/",
+                        "../speling.org-tools/source/",
+                        "../Bioinformatics/src/");
+
+   for Main use ("ordn_filmliste");
+
+   package Builder  renames Ada_2005.Builder;
+   package Compiler renames Ada_2005.Compiler;
+
+   for Object_Dir use "obj/";
+   for Exec_Dir   use "bin/";
+end Miscellaneous;
