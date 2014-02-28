@@ -8,7 +8,8 @@ project Miscellaneous is
                         "../Bioinformatics/src/");
 
    for Main use ("ordn_bogliste",
-                 "ordn_filmliste");
+                 "ordn_filmliste",
+                 "ordn_tegneserieliste");
 
    package Builder  renames Ada_2005.Builder;
    package Compiler renames Ada_2005.Compiler;

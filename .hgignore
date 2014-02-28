@@ -26,5 +26,7 @@ obj/*.ali
 obj/*.o
 
 # Generated executables:
-bin/ordn_filmliste*
+bin/ordn_bogliste
+bin/ordn_filmliste
+bin/ordn_tegneserieliste
 
