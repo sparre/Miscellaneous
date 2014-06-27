@@ -29,4 +29,5 @@ obj/*.o
 bin/ordn_bogliste
 bin/ordn_filmliste
 bin/ordn_tegneserieliste
+bin/randomise_lines
 

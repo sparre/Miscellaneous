@@ -1,6 +1,9 @@
 PROJECT=miscellaneous
 
-GENERATED_EXECUTABLES=bin/ordn_filmliste
+GENERATED_EXECUTABLES=bin/ordn_bogliste \
+                      bin/ordn_filmliste \
+                      bin/ordn_tegneserieliste \
+                      bin/randomise_lines
 
 GENERATED_SOURCES=
 
