@@ -5,7 +5,7 @@ with
 
 procedure Ordn_Bogliste is
    type Entry_Fields is (Titel, Originaltitel,
-                         Forfatter, Oversætter,
+                         Forfatter, Oversætter, Redaktør,
                          Forlag, ISBN,
                          Anskaffelsesdato, Anskaffelsespris,
                          Udgivelsesår,
