@@ -12,7 +12,7 @@ procedure Ordn_Bogliste is
                          Sprog,
                          Sidetal,
                          Pris, Værdi,
-                         Noter);
+                         Læst, Noter);
 
    package Entry_Text_IO is new Internet.Headers (Entry_Fields);
 
