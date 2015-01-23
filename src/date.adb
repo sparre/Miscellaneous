@@ -1,30 +1,18 @@
 with Ada.Integer_Text_IO;
 
-package body Date is
-   procedure Get (File  : in     Ada.Text_IO.File_Type;
-                  Valid : in     Character);
+with Get_And_Check,
+     Zero_Filled_2_Digit_Image;
 
+package body Date is
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Instance) is
       use Ada.Integer_Text_IO;
    begin
-      Get (File => File, Item  => Item.Year);
-      Get (File => File, Valid => '-');
-      Get (File => File, Item  => Item.Month);
-      Get (File => File, Valid => '-');
-      Get (File => File, Item  => Item.Day);
-   end Get;
-
-   procedure Get (File  : in     Ada.Text_IO.File_Type;
-                  Valid : in     Character) is
-      Item : Character;
-   begin
-      Ada.Text_IO.Get (File => File,
-                       Item => Item);
-      if Item /= Valid then
-         raise Ada.Text_IO.Data_Error
-           with "'" & Valid & "' expected.  Got '" & Item & "'.";
-      end if;
+      Get           (File, Item.Year);
+      Get_And_Check (File, '-');
+      Get           (File, Item.Month);
+      Get_And_Check (File, '-');
+      Get           (File, Item.Day);
    end Get;
 
    procedure Put (File : in     Ada.Text_IO.File_Type;
@@ -33,8 +21,8 @@ package body Date is
    begin
       Put (File, Item.Year,  Width => 4);
       Put (File, '-');
-      Put (File, Item.Month, Width => 2);
+      Put (File, Zero_Filled_2_Digit_Image (Item.Month));
       Put (File, '-');
-      Put (File, Item.Day,   Width => 2);
+      Put (File, Zero_Filled_2_Digit_Image (Item.Day));
    end Put;
 end Date;
