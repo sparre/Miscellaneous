@@ -5,7 +5,8 @@ GENERATED_EXECUTABLES=bin/ordn_bogliste \
                       bin/ordn_tegneserieliste \
                       bin/randomise_lines
 
-GENERATED_SOURCES=
+GENERATED_SOURCES=bioinformatics \
+                  speling.org-tools
 
 SCRIPTS=
 
