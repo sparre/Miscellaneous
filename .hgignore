@@ -30,4 +30,5 @@ bin/ordn_bogliste
 bin/ordn_filmliste
 bin/ordn_tegneserieliste
 bin/randomise_lines
+bin/summarise_time_spent_on_tasks
 
