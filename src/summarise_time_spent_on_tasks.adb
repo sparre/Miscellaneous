@@ -1,4 +1,5 @@
-with Ada.Characters.Latin_1,
+with Ada.Calendar.Formatting,
+     Ada.Characters.Latin_1,
      Ada.Containers.Indefinite_Hashed_Maps,
      Ada.Containers.Indefinite_Hashed_Sets,
      Ada.Strings.Unbounded,
@@ -188,13 +189,45 @@ procedure Summarise_Time_Spent_On_Tasks is
                           Tags       : in     Tag_Sets.Set;
                           Time_Spent : in     Task_Maps.Map) is
    begin
-      if False then
-         Put (File => Ada.Text_IO.Standard_Error,
-              Item => Line'(Kind   => Day_Class,
-                            others => <>));
-      end if;
+      Put_Tags :
+      declare
+         use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
+         use Standard.Date;
+         Cursor : Tag_Sets.Cursor := Tags.First;
+      begin
+         while Tag_Sets.Has_Element (Cursor) loop
+            Put      (Standard_Output, Date);
+            Put      (Standard_Output, Ada.Characters.Latin_1.HT);
+            Put      (Standard_Output, "#");
+            Put      (Standard_Output, Ada.Characters.Latin_1.HT);
+            Put_Line (Standard_Output, Tag_Sets.Element (Cursor));
 
-      raise Program_Error with "Put_Summary: Not implemented yet.";
+            Tag_Sets.Next (Cursor);
+         end loop;
+      end Put_Tags;
+
+      Put_Tasks :
+      declare
+         use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
+         use Standard.Date;
+         Cursor : Task_Maps.Cursor := Time_Spent.First;
+      begin
+         while Task_Maps.Has_Element (Cursor) loop
+            declare
+               T : Task_Type renames Task_Maps.Element (Cursor);
+            begin
+               if T.Time_Spent > 0.0 then
+                  Put      (Standard_Output, Date);
+                  Put      (Standard_Output, Ada.Characters.Latin_1.HT);
+                  Put      (Standard_Output, Duration'Image (T.Time_Spent));
+                  Put      (Standard_Output, Ada.Characters.Latin_1.HT);
+                  Put_Line (Standard_Output, T.Title);
+               end if;
+            end;
+
+            Task_Maps.Next (Cursor);
+         end loop;
+      end Put_Tasks;
    end Put_Summary;
 
    procedure Summarise_Day (File        : in     Ada.Text_IO.File_Type;
@@ -216,7 +249,9 @@ procedure Summarise_Time_Spent_On_Tasks is
       end if;
 
       if First_Line.Kind = Day_Class then
-         Tags.Insert (First_Line.Class);
+         if not Tags.Contains (First_Line.Class) then
+            Tags.Insert (First_Line.Class);
+         end if;
       elsif First_Line.Kind = Task_End then
          raise Constraint_Error
            with "Inconsistent line sequence.";
@@ -232,7 +267,9 @@ procedure Summarise_Time_Spent_On_Tasks is
          case Current.Kind is
             when Day_Class =>
                if Previous.Kind = Task_End or Previous.Kind = Day_Class then
-                  Tags.Insert (Current.Class);
+                  if not Tags.Contains (Current.Class) then
+                     Tags.Insert (Current.Class);
+                  end if;
                else
                   raise Constraint_Error
                     with "Inconsistent line sequence.";
@@ -267,12 +304,17 @@ procedure Summarise_Time_Spent_On_Tasks is
    exception
       when Ada.Text_IO.End_Error =>
          End_Of_File := True;
+      when others =>
+         Put (File => Ada.Text_IO.Standard_Error, Item => Previous);
+         Put (File => Ada.Text_IO.Standard_Error, Item => Current);
+         raise;
    end Summarise_Day;
 
    function Weekend (Date : in Standard.Date.Instance) return Boolean is
+      use Ada.Calendar.Formatting;
+      use type Standard.Date.Instance;
    begin
-      raise Program_Error with "Weekend: Not implemented yet.";
-      return False;
+      return Day_Of_Week (+Date) in Saturday .. Sunday;
    end Weekend;
 
    use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
