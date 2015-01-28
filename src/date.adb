@@ -4,6 +4,13 @@ with Get_And_Check,
      Zero_Filled_2_Digit_Image;
 
 package body Date is
+   function "+" (Item : in Instance) return Ada.Calendar.Time is
+   begin
+      return Ada.Calendar.Time_Of (Year  => Item.Year,
+                                   Month => Item.Month,
+                                   Day   => Item.Day);
+   end "+";
+
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Instance) is
       use Ada.Integer_Text_IO;
