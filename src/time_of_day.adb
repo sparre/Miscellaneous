@@ -2,6 +2,12 @@ with Get_And_Check,
      Zero_Filled_2_Digit_Image;
 
 package body Time_Of_Day is
+   function "-" (Left, Right : in Instance) return Duration is
+   begin
+      return (Left.Hour   - Right.Hour) * 3600.0 +
+             (Left.Minute - Right.Minute) * 60.0;
+   end "-";
+
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Instance) is
       use Ada.Text_IO;

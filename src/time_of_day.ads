@@ -10,6 +10,8 @@ package Time_Of_Day is
          Minute : Minute_Number;
       end record;
 
+   function "-" (Left, Right : in Instance) return Duration;
+
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Instance);
    procedure Put (File : in     Ada.Text_IO.File_Type;
