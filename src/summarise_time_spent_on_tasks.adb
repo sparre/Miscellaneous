@@ -1,5 +1,8 @@
 with Ada.Characters.Latin_1,
+     Ada.Containers.Indefinite_Hashed_Maps,
+     Ada.Containers.Indefinite_Hashed_Sets,
      Ada.Strings.Unbounded,
+     Ada.Strings.Unbounded.Hash,
      Ada.Strings.Unbounded.Text_IO,
      Ada.Text_IO;
 
@@ -21,10 +24,69 @@ procedure Summarise_Time_Spent_On_Tasks is
          end case;
       end record;
 
+   subtype Actual_Duration is Duration range 0.0 .. Duration'Last;
+
+   type Task_Type is
+      record
+         Title      : Ada.Strings.Unbounded.Unbounded_String;
+         Time_Spent : Actual_Duration := 0.0;
+      end record;
+
+   package Task_Maps is
+      new Ada.Containers.Indefinite_Hashed_Maps
+            (Key_Type        => Ada.Strings.Unbounded.Unbounded_String,
+             Element_Type    => Task_Type,
+             Hash            => Ada.Strings.Unbounded.Hash,
+             Equivalent_Keys => Ada.Strings.Unbounded."=");
+
+   procedure Append
+     (Tasks      : in out Task_Maps.Map;
+      Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Time_Spent : in     Actual_Duration);
+
+   package Tag_Sets is
+      new Ada.Containers.Indefinite_Hashed_Sets
+            (Element_Type        => Ada.Strings.Unbounded.Unbounded_String,
+             Hash                => Ada.Strings.Unbounded.Hash,
+             Equivalent_Elements => Ada.Strings.Unbounded."=",
+             "="                 => Ada.Strings.Unbounded."=");
+
+   function Weekend (Date : in Standard.Date.Instance) return Boolean;
+
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Line);
    procedure Put (File : in     Ada.Text_IO.File_Type;
                   Item : in     Line);
+
+   procedure Summarise_Day (File        : in     Ada.Text_IO.File_Type;
+                            First_Line  : in     Line;
+                            Tags        :    out Tag_Sets.Set;
+                            Tasks       :    out Task_Maps.Map;
+                            End_Of_File :    out Boolean;
+                            Last_Line   :    out Line);
+
+   procedure Put_Summary (Date       : in     Standard.Date.Instance;
+                          Tags       : in     Tag_Sets.Set;
+                          Time_Spent : in     Task_Maps.Map);
+
+   procedure Append
+     (Tasks      : in out Task_Maps.Map;
+      Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Time_Spent : in     Actual_Duration) is
+      Accumulated : Task_Type;
+   begin
+      if Tasks.Contains (Task_ID) then
+         Accumulated := Tasks.Element (Task_ID);
+         Accumulated.Time_Spent := Accumulated.Time_Spent + Time_Spent;
+         Tasks.Replace (Key      => Task_ID,
+                        New_Item => (Title      => Task_ID,
+                                     Time_Spent => Time_Spent));
+      else
+         Tasks.Insert (Key      => Task_ID,
+                       New_Item => (Title      => Task_ID,
+                                    Time_Spent => Time_Spent));
+      end if;
+   end Append;
 
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Line) is
@@ -122,15 +184,116 @@ procedure Summarise_Time_Spent_On_Tasks is
       end case;
    end Put;
 
+   procedure Put_Summary (Date       : in     Standard.Date.Instance;
+                          Tags       : in     Tag_Sets.Set;
+                          Time_Spent : in     Task_Maps.Map) is
+   begin
+      if False then
+         Put (File => Ada.Text_IO.Standard_Error,
+              Item => Line'(Kind   => Day_Class,
+                            others => <>));
+      end if;
+
+      raise Program_Error with "Put_Summary: Not implemented yet.";
+   end Put_Summary;
+
+   procedure Summarise_Day (File        : in     Ada.Text_IO.File_Type;
+                            First_Line  : in     Line;
+                            Tags        :    out Tag_Sets.Set;
+                            Tasks       :    out Task_Maps.Map;
+                            End_Of_File :    out Boolean;
+                            Last_Line   :    out Line) is
+      use type Ada.Strings.Unbounded.Unbounded_String;
+      use type Date.Instance, Time_Of_Day.Instance;
+      Date              : Standard.Date.Instance renames First_Line.Date;
+      Previous, Current : Line;
+   begin
+      Tags.Clear;
+      Tasks.Clear;
+
+      if Weekend (Date) then
+         Tags.Insert (Ada.Strings.Unbounded.To_Unbounded_String ("Weekend"));
+      end if;
+
+      if First_Line.Kind = Day_Class then
+         Tags.Insert (First_Line.Class);
+      elsif First_Line.Kind = Task_End then
+         raise Constraint_Error
+           with "Inconsistent line sequence.";
+      end if;
+
+      Current := First_Line;
+      loop
+         Previous := Current;
+         Get (File => File, Item => Current);
+
+         exit when Current.Date /= Date;
+
+         case Current.Kind is
+            when Day_Class =>
+               if Previous.Kind = Task_End or Previous.Kind = Day_Class then
+                  Tags.Insert (Current.Class);
+               else
+                  raise Constraint_Error
+                    with "Inconsistent line sequence.";
+               end if;
+            when Task_Begin =>
+               if Previous.Kind = Task_Begin then
+                  Append (Tasks      => Tasks,
+                          Task_ID    => Previous.Task_ID,
+                          Time_Spent => Current.Time - Previous.Time);
+               end if;
+            when Task_End =>
+               if Previous.Kind = Task_Begin and
+                  Previous.Task_ID = Current.Task_ID
+               then
+                  Append (Tasks      => Tasks,
+                          Task_ID    => Previous.Task_ID,
+                          Time_Spent => Current.Time - Previous.Time);
+               else
+                  raise Constraint_Error
+                    with "Inconsistent line sequence.";
+               end if;
+         end case;
+      end loop;
+
+      if Previous.Kind = Task_Begin then
+         raise Constraint_Error
+           with "Inconsistent line sequence.";
+      end if;
+
+      End_Of_File := False;
+      Last_Line := Current;
+   exception
+      when Ada.Text_IO.End_Error =>
+         End_Of_File := True;
+   end Summarise_Day;
+
+   function Weekend (Date : in Standard.Date.Instance) return Boolean is
+   begin
+      raise Program_Error with "Weekend: Not implemented yet.";
+      return False;
+   end Weekend;
+
    use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
 
-   Item : Line;
+   Tags          : Tag_Sets.Set;
+   Tasks         : Task_Maps.Map;
+   Current, Next : Line;
+   End_Of_File   : Boolean := False;
 begin
-   loop
-      Get (File => Standard_Input,  Item => Item);
-      Put (File => Standard_Output, Item => Item);
+   Get (File => Standard_Input, Item => Next);
+   while not End_Of_File loop
+      Current := Next;
+      Summarise_Day (File        => Standard_Input,
+                     First_Line  => Current,
+                     Tags        => Tags,
+                     Tasks       => Tasks,
+                     End_Of_File => End_Of_File,
+                     Last_Line   => Next);
+
+      Put_Summary (Date       => Current.Date,
+                   Tags       => Tags,
+                   Time_Spent => Tasks);
    end loop;
-exception
-   when End_Error =>
-      null;
 end Summarise_Time_Spent_On_Tasks;
