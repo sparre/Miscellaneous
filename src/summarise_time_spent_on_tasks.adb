@@ -45,6 +45,9 @@ procedure Summarise_Time_Spent_On_Tasks is
       Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
       Time_Spent : in     Actual_Duration);
 
+   procedure Accumulate (Accumulator : in out Task_Maps.Map;
+                         New_Items   : in     Task_Maps.Map);
+
    package Tag_Sets is
       new Ada.Containers.Indefinite_Hashed_Sets
             (Element_Type        => Ada.Strings.Unbounded.Unbounded_String,
@@ -69,6 +72,14 @@ procedure Summarise_Time_Spent_On_Tasks is
    procedure Put_Summary (Date       : in     Standard.Date.Instance;
                           Tags       : in     Tag_Sets.Set;
                           Time_Spent : in     Task_Maps.Map);
+
+   procedure Accumulate (Accumulator : in out Task_Maps.Map;
+                         New_Items   : in     Task_Maps.Map) is
+      pragma Unreferenced (Accumulator,
+                           New_Items);
+   begin
+      raise Program_Error with "Accumulate: Not implemented yet.";
+   end Accumulate;
 
    procedure Append
      (Tasks      : in out Task_Maps.Map;
@@ -319,23 +330,27 @@ procedure Summarise_Time_Spent_On_Tasks is
 
    use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
 
-   Tags          : Tag_Sets.Set;
-   Tasks         : Task_Maps.Map;
-   Current, Next : Line;
-   End_Of_File   : Boolean := False;
+   Daily_Tags        : Tag_Sets.Set;
+   Daily_Tasks       : Task_Maps.Map;
+   Current, Next     : Line;
+   End_Of_File       : Boolean := False;
+   Accumulated_Tasks : Task_Maps.Map;
 begin
    Get (File => Standard_Input, Item => Next);
    while not End_Of_File loop
       Current := Next;
       Summarise_Day (File        => Standard_Input,
                      First_Line  => Current,
-                     Tags        => Tags,
-                     Tasks       => Tasks,
+                     Tags        => Daily_Tags,
+                     Tasks       => Daily_Tasks,
                      End_Of_File => End_Of_File,
                      Last_Line   => Next);
 
       Put_Summary (Date       => Current.Date,
-                   Tags       => Tags,
-                   Time_Spent => Tasks);
+                   Tags       => Daily_Tags,
+                   Time_Spent => Daily_Tasks);
+
+      Accumulate (Accumulator => Accumulated_Tasks,
+                  New_Items   => Daily_Tasks);
    end loop;
 end Summarise_Time_Spent_On_Tasks;
