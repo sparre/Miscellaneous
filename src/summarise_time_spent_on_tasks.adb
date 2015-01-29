@@ -344,6 +344,11 @@ procedure Summarise_Time_Spent_On_Tasks is
            with "Inconsistent line sequence.";
       end if;
 
+      if Tags.Is_Empty then
+         Tags.Insert
+           (Ada.Strings.Unbounded.To_Unbounded_String ("Arbejdsdag"));
+      end if;
+
       End_Of_File := False;
       Last_Line := Current;
    exception
