@@ -2,6 +2,7 @@ with Ada.Calendar.Formatting,
      Ada.Characters.Latin_1,
      Ada.Containers.Indefinite_Hashed_Maps,
      Ada.Containers.Indefinite_Hashed_Sets,
+     Ada.Integer_Text_IO,
      Ada.Strings.Unbounded,
      Ada.Strings.Unbounded.Hash,
      Ada.Strings.Unbounded.Text_IO,
@@ -103,8 +104,7 @@ procedure Summarise_Time_Spent_On_Tasks is
          Accumulated := Tasks.Element (Task_ID);
          Accumulated.Time_Spent := Accumulated.Time_Spent + Time_Spent;
          Tasks.Replace (Key      => Task_ID,
-                        New_Item => (Title      => Task_ID,
-                                     Time_Spent => Time_Spent));
+                        New_Item => Accumulated);
       else
          Tasks.Insert (Key      => Task_ID,
                        New_Item => (Title      => Task_ID,
@@ -231,7 +231,7 @@ procedure Summarise_Time_Spent_On_Tasks is
 
       Put_Tasks :
       declare
-         use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
+         use Ada.Integer_Text_IO, Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
          use Standard.Date;
          Cursor : Task_Maps.Cursor := Time_Spent.First;
       begin
@@ -242,7 +242,7 @@ procedure Summarise_Time_Spent_On_Tasks is
                if T.Time_Spent > 0.0 then
                   Put      (Standard_Output, Date);
                   Put      (Standard_Output, Ada.Characters.Latin_1.HT);
-                  Put      (Standard_Output, Duration'Image (T.Time_Spent));
+                  Put      (Standard_Output, Integer (T.Time_Spent / 60.0));
                   Put      (Standard_Output, Ada.Characters.Latin_1.HT);
                   Put_Line (Standard_Output, T.Title);
                end if;
@@ -254,7 +254,7 @@ procedure Summarise_Time_Spent_On_Tasks is
    end Put_Summary;
 
    procedure Put_Summary (Time_Spent : in     Task_Maps.Map) is
-      use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
+      use Ada.Integer_Text_IO, Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
       use Standard.Date;
       Cursor : Task_Maps.Cursor := Time_Spent.First;
    begin
@@ -265,7 +265,7 @@ procedure Summarise_Time_Spent_On_Tasks is
             if T.Time_Spent > 0.0 then
                Put      (Standard_Output, '#');
                Put      (Standard_Output, Ada.Characters.Latin_1.HT);
-               Put      (Standard_Output, Duration'Image (T.Time_Spent));
+               Put      (Standard_Output, Integer (T.Time_Spent / 60.0));
                Put      (Standard_Output, Ada.Characters.Latin_1.HT);
                Put_Line (Standard_Output, T.Title);
             end if;
