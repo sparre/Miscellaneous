@@ -1,0 +1,94 @@
+#! /bin/zsh
+#-----------------------------------------------------------------------------
+#--  Set current working directory:
+
+if cd "$(dirname "$0")"; then
+   true
+else
+   echo "Could not make '$(dirname "$0")' the current working directory." 1>&2
+   exit 100
+fi
+
+#-----------------------------------------------------------------------------
+#--  Prepare test report:
+
+test_report=$(mktemp)
+
+#-----------------------------------------------------------------------------
+#--  Run test:
+
+if [ -d ~/Tofta_Teld/tidsregnskab ]; then
+   (
+      cat ~/Tofta_Teld/tidsregnskab/20??-??-?? \
+        | ../../bin/summarise_time_spent_on_tasks
+      result=$?
+
+      if [ ${result} -ne 0 ]; then
+         echo Exit code: ${result} 1>&2
+      fi
+   ) 1>log 2>errors
+
+   if [ ! -s errors ]; then
+      (
+         echo '  <testcase classname="Time summary of Jacobs time log" name="run">'
+         sed 's/^/    /' log
+         echo '  </testcase>'
+      ) >> ${test_report}
+   else
+      echo "Summary tool returned a non-zero exit code or error messages." 1>&2
+      # failure
+      (
+         echo '  <testcase classname="Time summary of Jacobs time log" name="run">'
+         echo '    <failure type="Non-zero exit code or error messages">'
+         echo '      Output:'
+         sed 's/^/      /' log
+         echo '      Errors:'
+         sed 's/^/      /' errors
+         echo '    </failure>'
+         echo '  </testcase>'
+      ) >> ${test_report}
+   fi
+else
+   echo "No test data available." 1>&2
+
+   (
+      echo '  <testcase classname="Time summary of Jacobs time log" name="run">'
+      echo '    <skipped type="No test data available">'
+      echo '    </skipped>'
+      echo '  </testcase>'
+   ) >> ${test_report}
+fi
+
+#-----------------------------------------------------------------------------
+#--  Compose test report:
+
+mkdir -p ../results
+
+skips=$(grep -c '<skipped ' ${test_report})
+failures=$(grep -c '<failure ' ${test_report})
+errors=$(grep -c '<error ' ${test_report})
+tests=$(grep -c '<testcase ' ${test_report})
+
+(
+   echo '<?xml version="1.0" encoding="iso-8859-1"?>'
+   echo '<testsuite errors="'${errors}'" failures="'${failures}'" skips="'${skips}'" tests="'${tests}'" name="Cyclomatic complexity">'
+   cat ${test_report}
+   echo '</testsuite>'
+) > "../results/$(basename $(pwd)).xml"
+
+rm -f ${test_report}
+
+let counter=${failures}+${errors}
+
+#-----------------------------------------------------------------------------
+#--  Clean up:
+
+if [ ! -s errors -o ${counter} = 0 ]; then
+   rm -f errors
+fi
+
+#-----------------------------------------------------------------------------
+
+exit ${counter}
+
+#-----------------------------------------------------------------------------

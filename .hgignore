@@ -11,10 +11,13 @@ tests/build.status
 tests/run.status
 tests/*/*.errors
 tests/*/*.output
+tests/results
 
 # Generated test executables:
 
 # Test output to clean up:
+tests/time_summary_of_Jacobs_private_data/errors
+tests/time_summary_of_Jacobs_private_data/log
 
 # Output from source text metric analysis:
 obj/*.ad[sb].metrix
