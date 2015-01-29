@@ -75,10 +75,21 @@ procedure Summarise_Time_Spent_On_Tasks is
 
    procedure Accumulate (Accumulator : in out Task_Maps.Map;
                          New_Items   : in     Task_Maps.Map) is
-      pragma Unreferenced (Accumulator,
-                           New_Items);
+      Cursor : Task_Maps.Cursor := New_Items.First;
    begin
-      raise Program_Error with "Accumulate: Not implemented yet.";
+      while Task_Maps.Has_Element (Cursor) loop
+         declare
+            T : Task_Type renames Task_Maps.Element (Cursor);
+         begin
+            if T.Time_Spent > 0.0 then
+               Append (Tasks      => Accumulator,
+                       Task_ID    => T.Title,
+                       Time_Spent => T.Time_Spent);
+            end if;
+         end;
+
+         Task_Maps.Next (Cursor);
+      end loop;
    end Accumulate;
 
    procedure Append
