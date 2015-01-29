@@ -72,6 +72,7 @@ procedure Summarise_Time_Spent_On_Tasks is
    procedure Put_Summary (Date       : in     Standard.Date.Instance;
                           Tags       : in     Tag_Sets.Set;
                           Time_Spent : in     Task_Maps.Map);
+   procedure Put_Summary (Time_Spent : in     Task_Maps.Map);
 
    procedure Accumulate (Accumulator : in out Task_Maps.Map;
                          New_Items   : in     Task_Maps.Map) is
@@ -252,6 +253,28 @@ procedure Summarise_Time_Spent_On_Tasks is
       end Put_Tasks;
    end Put_Summary;
 
+   procedure Put_Summary (Time_Spent : in     Task_Maps.Map) is
+      use Ada.Strings.Unbounded.Text_IO, Ada.Text_IO;
+      use Standard.Date;
+      Cursor : Task_Maps.Cursor := Time_Spent.First;
+   begin
+      while Task_Maps.Has_Element (Cursor) loop
+         declare
+            T : Task_Type renames Task_Maps.Element (Cursor);
+         begin
+            if T.Time_Spent > 0.0 then
+               Put      (Standard_Output, '#');
+               Put      (Standard_Output, Ada.Characters.Latin_1.HT);
+               Put      (Standard_Output, Duration'Image (T.Time_Spent));
+               Put      (Standard_Output, Ada.Characters.Latin_1.HT);
+               Put_Line (Standard_Output, T.Title);
+            end if;
+         end;
+
+         Task_Maps.Next (Cursor);
+      end loop;
+   end Put_Summary;
+
    procedure Summarise_Day (File        : in     Ada.Text_IO.File_Type;
                             First_Line  : in     Line;
                             Tags        :    out Tag_Sets.Set;
@@ -364,4 +387,6 @@ begin
       Accumulate (Accumulator => Accumulated_Tasks,
                   New_Items   => Daily_Tasks);
    end loop;
+
+   Put_Summary (Time_Spent => Accumulated_Tasks);
 end Summarise_Time_Spent_On_Tasks;
