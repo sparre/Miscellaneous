@@ -321,17 +321,27 @@ procedure Summarise_Time_Spent_On_Tasks is
                end if;
             when Task_Begin =>
                if Previous.Kind = Task_Begin then
-                  Append (Tasks      => Tasks,
-                          Task_ID    => Previous.Task_ID,
-                          Time_Spent => Current.Time - Previous.Time);
+                  if Current.Time < Previous.Time then
+                     raise Constraint_Error
+                       with "Incorrectly ordered lines in the time log.";
+                  else
+                     Append (Tasks      => Tasks,
+                             Task_ID    => Previous.Task_ID,
+                             Time_Spent => Current.Time - Previous.Time);
+                  end if;
                end if;
             when Task_End =>
                if Previous.Kind = Task_Begin and
                   Previous.Task_ID = Current.Task_ID
                then
-                  Append (Tasks      => Tasks,
-                          Task_ID    => Previous.Task_ID,
-                          Time_Spent => Current.Time - Previous.Time);
+                  if Current.Time < Previous.Time then
+                     raise Constraint_Error
+                       with "Incorrectly ordered lines in the time log.";
+                  else
+                     Append (Tasks      => Tasks,
+                             Task_ID    => Previous.Task_ID,
+                             Time_Spent => Current.Time - Previous.Time);
+                  end if;
                else
                   raise Constraint_Error
                     with "Inconsistent line sequence.";
