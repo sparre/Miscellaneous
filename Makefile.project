@@ -1,9 +1,11 @@
 PROJECT=miscellaneous
 
-GENERATED_EXECUTABLES=bin/ordn_bogliste \
+GENERATED_EXECUTABLES=bin/hex_colours_to_ppm_colour_table \
+                      bin/ordn_bogliste \
                       bin/ordn_filmliste \
                       bin/ordn_tegneserieliste \
-                      bin/randomise_lines
+                      bin/randomise_lines \
+                      bin/summarise_time_spent_on_tasks
 
 GENERATED_SOURCES=bioinformatics \
                   speling.org-tools
