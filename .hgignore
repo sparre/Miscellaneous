@@ -29,6 +29,7 @@ obj/*.ali
 obj/*.o
 
 # Generated executables:
+bin/binær_fillæser
 bin/hex_colours_to_ppm_colour_table
 bin/ordn_bogliste
 bin/ordn_filmliste
