@@ -13,7 +13,8 @@ project Miscellaneous is
                  "ordn_filmliste",
                  "ordn_tegneserieliste",
                  "randomise_lines",
-                 "summarise_time_spent_on_tasks");
+                 "summarise_time_spent_on_tasks",
+                 "to_binary");
 
    package Builder  renames Ada_2005.Builder;
    package Compiler renames Ada_2005.Compiler;
