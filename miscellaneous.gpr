@@ -8,7 +8,8 @@ project Miscellaneous is
                         "speling.org-tools/source/",
                         "bioinformatics/src/");
 
-   for Main use ("binær_fillæser",
+   for Main use ("mercurial",
+                 "binær_fillæser",
                  "hex_colours_to_ppm_colour_table",
                  "ordn_bogliste",
                  "ordn_filmliste",

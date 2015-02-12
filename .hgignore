@@ -23,6 +23,7 @@ tests/time_summary_of_Jacobs_private_data/log
 obj/*.ad[sb].metrix
 
 # Generated source files:
+src/mercurial.ads
 
 # Generated object files:
 obj/*.ali
