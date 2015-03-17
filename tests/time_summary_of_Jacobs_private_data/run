@@ -20,6 +20,7 @@ test_report=$(mktemp)
 if [ -d ~/Tofta_Teld/tidsregnskab ]; then
    (
       cat ~/Tofta_Teld/tidsregnskab/20??-??-?? \
+        | perl -lpe 's/ \[.+\]$//' \
         | ../../bin/summarise_time_spent_on_tasks
       result=$?
 

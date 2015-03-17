@@ -58,6 +58,9 @@ procedure Summarise_Time_Spent_On_Tasks is
 
    function Weekend (Date : in Standard.Date.Instance) return Boolean;
 
+   function Today return Standard.Date.Instance;
+   function Now   return Standard.Time_Of_Day.Instance;
+
    procedure Get (File : in     Ada.Text_IO.File_Type;
                   Item :    out Line);
    procedure Put (File : in     Ada.Text_IO.File_Type;
@@ -174,6 +177,33 @@ procedure Summarise_Time_Spent_On_Tasks is
                    Item => """");
          raise;
    end Get;
+
+   function Now return Standard.Time_Of_Day.Instance is
+      use Ada.Calendar;
+      Year        : Year_Number;
+      Month       : Month_Number;
+      Day         : Day_Number;
+      Time_Of_Day : Day_Duration;
+   begin
+      Split (Date    => Clock,
+             Year    => Year,
+             Month   => Month,
+             Day     => Day,
+             Seconds => Time_Of_Day);
+      return Result : Standard.Time_Of_Day.Instance := (Hour   => 0,
+                                                        Minute => 0)
+      do
+         while Time_Of_Day >= 3600.0 loop
+            Result.Hour := Result.Hour + 1;
+            Time_Of_Day := Time_Of_Day - 3600.0;
+         end loop;
+
+         while Time_Of_Day >= 60.0 loop
+            Result.Minute := Result.Minute + 1;
+            Time_Of_Day   := Time_Of_Day - 60.0;
+         end loop;
+      end return;
+   end Now;
 
    procedure Put (File : in     Ada.Text_IO.File_Type;
                   Item : in     Line) is
@@ -350,8 +380,14 @@ procedure Summarise_Time_Spent_On_Tasks is
       end loop;
 
       if Previous.Kind = Task_Begin then
-         raise Constraint_Error
-           with "Inconsistent line sequence.";
+         if Previous.Date = Today and then Now >= Previous.Time then
+            Append (Tasks      => Tasks,
+                    Task_ID    => Previous.Task_ID,
+                    Time_Spent => Now - Previous.Time);
+         else
+            raise Constraint_Error
+              with "Inconsistent line sequence.";
+         end if;
       end if;
 
       if Tags.Is_Empty then
@@ -364,11 +400,34 @@ procedure Summarise_Time_Spent_On_Tasks is
    exception
       when Ada.Text_IO.End_Error =>
          End_Of_File := True;
+
+         if Previous.Date = Today and then Now >= Previous.Time then
+            Append (Tasks      => Tasks,
+                    Task_ID    => Previous.Task_ID,
+                    Time_Spent => Now - Previous.Time);
+         end if;
       when others =>
          Put (File => Ada.Text_IO.Standard_Error, Item => Previous);
          Put (File => Ada.Text_IO.Standard_Error, Item => Current);
          raise;
    end Summarise_Day;
+
+   function Today return Standard.Date.Instance is
+      use Ada.Calendar;
+      Year        : Year_Number;
+      Month       : Month_Number;
+      Day         : Day_Number;
+      Time_Of_Day : Day_Duration;
+   begin
+      Split (Date    => Clock,
+             Year    => Year,
+             Month   => Month,
+             Day     => Day,
+             Seconds => Time_Of_Day);
+      return (Year  => Year,
+              Month => Month,
+              Day   => Day);
+   end Today;
 
    function Weekend (Date : in Standard.Date.Instance) return Boolean is
       use Ada.Calendar.Formatting;
