@@ -399,13 +399,18 @@ procedure Summarise_Time_Spent_On_Tasks is
       Last_Line := Current;
    exception
       when Ada.Text_IO.End_Error =>
-         End_Of_File := True;
-
          if Previous.Date = Today and then Now >= Previous.Time then
             Append (Tasks      => Tasks,
                     Task_ID    => Previous.Task_ID,
                     Time_Spent => Now - Previous.Time);
          end if;
+
+         if Tags.Is_Empty then
+            Tags.Insert
+              (Ada.Strings.Unbounded.To_Unbounded_String ("Arbejdsdag"));
+         end if;
+
+         End_Of_File := True;
       when others =>
          Put (File => Ada.Text_IO.Standard_Error, Item => Previous);
          Put (File => Ada.Text_IO.Standard_Error, Item => Current);
