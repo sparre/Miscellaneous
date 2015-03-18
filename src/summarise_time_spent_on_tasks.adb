@@ -399,7 +399,10 @@ procedure Summarise_Time_Spent_On_Tasks is
       Last_Line := Current;
    exception
       when Ada.Text_IO.End_Error =>
-         if Previous.Date = Today and then Now >= Previous.Time then
+         if Previous.Kind = Task_Begin and then
+            Previous.Date = Today and then
+            Previous.Time <= Now
+         then
             Append (Tasks      => Tasks,
                     Task_ID    => Previous.Task_ID,
                     Time_Spent => Now - Previous.Time);
