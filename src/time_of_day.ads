@@ -14,6 +14,8 @@ package Time_Of_Day is
 
    function "<" (Left, Right : in Instance) return Boolean;
 
+   function "<=" (Left, Right : in Instance) return Boolean;
+
    function ">=" (Left, Right : in Instance) return Boolean;
 
    procedure Get (File : in     Ada.Text_IO.File_Type;

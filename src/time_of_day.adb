@@ -14,10 +14,16 @@ package body Time_Of_Day is
              (Left.Hour = Right.Hour and Left.Minute < Right.Minute);
    end "<";
 
+   function "<=" (Left, Right : in Instance) return Boolean is
+   begin
+      return (Left.Hour < Right.Hour) or
+             (Left.Hour = Right.Hour and Left.Minute <= Right.Minute);
+   end "<=";
+
    function ">=" (Left, Right : in Instance) return Boolean is
    begin
-      return (Left.Hour >= Right.Hour) or
-             (Left.Hour  = Right.Hour and Left.Minute >= Right.Minute);
+      return (Left.Hour > Right.Hour) or
+             (Left.Hour = Right.Hour and Left.Minute >= Right.Minute);
    end ">=";
 
    procedure Get (File : in     Ada.Text_IO.File_Type;
