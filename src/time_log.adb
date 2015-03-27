@@ -88,4 +88,10 @@ package body Time_Log is
    begin
       return Day_Of_Week (+Date) in Saturday .. Sunday;
    end Weekend;
+
+   function Workday (Tags : in Tag_Sets.Set) return Boolean is
+      use Ada.Strings.Unbounded;
+   begin
+      return Tags.Contains (To_Unbounded_String ("Arbejdsdag"));
+   end Workday;
 end Time_Log;

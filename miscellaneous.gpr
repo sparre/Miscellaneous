@@ -16,6 +16,7 @@ project Miscellaneous is
                  "ordn_tegneserieliste",
                  "randomise_lines",
                  "summarise_time_spent_on_tasks",
+                 "time_log-plot_work_by_day",
                  "to_binary");
 
    package Builder  renames Ada_2005.Builder;

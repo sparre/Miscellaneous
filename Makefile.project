@@ -7,6 +7,7 @@ GENERATED_EXECUTABLES=bin/binær_fillæser \
                       bin/ordn_tegneserieliste \
                       bin/randomise_lines \
                       bin/summarise_time_spent_on_tasks \
+                      bin/time_log-plot_work_by_day \
                       bin/to_binary
 
 GENERATED_SOURCES=bioinformatics \

@@ -51,6 +51,7 @@ package Time_Log is
              "="                 => Ada.Strings.Unbounded."=");
 
    function Weekend (Date : in Standard.Date.Instance) return Boolean;
+   function Workday (Tags : in Tag_Sets.Set) return Boolean;
 
    function Today return Standard.Date.Instance;
    function Now   return Standard.Time_Of_Day.Instance;
