@@ -19,13 +19,21 @@ test_report=$(mktemp)
 
 if [ -d ~/Tofta_Teld/tidsregnskab ]; then
    (
-      cat ~/Tofta_Teld/tidsregnskab/20??-??-?? \
-        | perl -lpe 's/ \[.+\]$//' \
+      perl -lpe 's/ \[.+\]$//' ~/Tofta_Teld/tidsregnskab/20??-??-?? \
         | ../../bin/summarise_time_spent_on_tasks
       result=$?
 
       if [ ${result} -ne 0 ]; then
-         echo Exit code: ${result} 1>&2
+         echo Summary exit code: ${result} 1>&2
+      fi
+
+      perl -lpe 's/ \[.+\]$//' ~/Tofta_Teld/tidsregnskab/20??-??-?? \
+        | ../../bin/time_log-plot_work_by_day \
+        | pnmsplit - month-%d.ppm 2>/dev/null
+      result=$?
+
+      if [ ${result} -ne 0 ]; then
+         echo Plot exit code: ${result} 1>&2
       fi
    ) 1>log 2>errors
 

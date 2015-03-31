@@ -18,6 +18,7 @@ tests/results
 # Test output to clean up:
 tests/time_summary_of_Jacobs_private_data/errors
 tests/time_summary_of_Jacobs_private_data/log
+tests/time_summary_of_Jacobs_private_data/month-*.ppm
 
 # Output from source text metric analysis:
 obj/*.ad[sb].metrix
