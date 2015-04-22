@@ -1,11 +1,11 @@
 bioinformatics:
-	if [ ! -d bioinformatics ]; then ( rm -f bioinformatics && hg clone http://repositories.jacob-sparre.dk/bioinformatics ); fi
+	if [ ! -d bioinformatics ]; then ( rm -f bioinformatics && hg clone https://bitbucket.org/sparre/bioinformatics ); fi
 
 bioinformatics-update: bioinformatics
 	cd bioinformatics && hg pull && hg update && hg revert --all
 
 speling.org-tools:
-	if [ ! -d speling.org-tools ]; then ( rm -f speling.org-tools && hg clone http://repositories.jacob-sparre.dk/speling.org-tools ); fi
+	if [ ! -d speling.org-tools ]; then ( rm -f speling.org-tools && hg clone https://bitbucket.org/sparre/speling.org-tools ); fi
 
 speling.org-tools-update: speling.org-tools
 	cd speling.org-tools && hg pull && hg update && hg revert --all
