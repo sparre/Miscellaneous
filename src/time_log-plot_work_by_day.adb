@@ -103,19 +103,19 @@ procedure Time_Log.Plot_Work_By_Day is
       Pauser : Ada.Calendar.Day_Duration := 0.0;
       Cursor : Task_Maps.Cursor := Time_Spent.First;
    begin
-      return Sum : Ada.Calendar.Day_Duration := 0.0 do
+      return Arbejde : Ada.Calendar.Day_Duration := 0.0 do
          while Task_Maps.Has_Element (Cursor) loop
             declare
                use type Ada.Strings.Unbounded.Unbounded_String;
                T : Task_Type renames Task_Maps.Element (Cursor);
             begin
-               Sum := Sum + T.Time_Spent;
-
                if T.Title = +"Frokost" or else
                   T.Title = +"Skærmpause" or else
                   T.Title = +"coop.dk/LEGO"
                then
-                  Pauser := Pauser + T.Time_Spent;
+                  Pauser  := Pauser  + T.Time_Spent;
+               else
+                  Arbejde := Arbejde + T.Time_Spent;
                end if;
             end;
 
