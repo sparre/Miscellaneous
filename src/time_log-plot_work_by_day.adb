@@ -111,6 +111,7 @@ procedure Time_Log.Plot_Work_By_Day is
             begin
                if T.Title = +"Frokost" or else
                   T.Title = +"Skærmpause" or else
+                  T.Title = +"Pause" or else
                   T.Title = +"coop.dk/LEGO"
                then
                   Pauser  := Pauser  + T.Time_Spent;
