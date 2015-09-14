@@ -16,19 +16,24 @@ build: fix-whitespace $(GENERATED_SOURCES)
 	gnatmake -p -P $(PROJECT)
 
 test: build metrics
+	@mkdir -p tests/results
 	@./tests/build
 	@./tests/run
 
 install: build test
+	@strip $(GENERATED_EXECUTABLES)
 	install -D -t $(DESTDIR)$(PREFIX)/bin/ $(EXECUTABLES)
 
 clean:
-	find . \( -name "*~" -o -name "*.bak" -o -name "*.o" -o -name "*.ali" \) -type f -print0 | xargs -0 -r /bin/rm
-	if [ ! -z "$(GENERATED_SOURCES)" ]; then rm -rf $(GENERATED_SOURCES); fi
+	find . \( -name "*~" -o -name "*.bak" -o -name "*.o" -o -name "*.ali" -o -name "*.adt" \) -type f -print0 | xargs -0 /bin/rm || true
+	if [ ! -z "$(GENERATED_SOURCES)" ]; then rm -f $(GENERATED_SOURCES) 2>/dev/null || true; fi
+	if [ ! -z "$(TEST_OUTPUT)"       ]; then rm -f $(TEST_OUTPUT)       2>/dev/null || true; fi
 	rmdir bin || true
 	rmdir obj || true
 
 distclean: clean
+	if [ ! -z "$(GENERATED_SOURCES)" ]; then rm -rf $(GENERATED_SOURCES); fi
+	if [ ! -z "$(TEST_OUTPUT)" ];       then rm -rf $(TEST_OUTPUT);       fi
 	gnatclean -P $(PROJECT) || true
 	rm -f $(GENERATED_EXECUTABLES)
 	rm -f obj/*.ad[sb].metrix
@@ -36,7 +41,7 @@ distclean: clean
 	rmdir obj || true
 
 fix-whitespace:
-	@find src tests -name '*.ad?' | xargs --no-run-if-empty egrep -l '	| $$' | grep -v '^b[~]' | xargs --no-run-if-empty perl -i -lpe 's|	|        |g; s| +$$||g'
+	@find src tests -name '*.ad?' | xargs egrep -l '	| $$' | grep -v '^b[~]' | xargs perl -i -lpe 's|	|        |g; s| +$$||g' 2>/dev/null || true
 
 metrics:
 	@gnat metric -P $(PROJECT)
