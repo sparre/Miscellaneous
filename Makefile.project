@@ -6,6 +6,7 @@ GENERATED_EXECUTABLES=bin/binær_fillæser \
                       bin/ordn_bogliste \
                       bin/ordn_filmliste \
                       bin/ordn_tegneserieliste \
+                      bin/ppm_circular_crop \
                       bin/randomise_lines \
                       bin/summarise_time_spent_on_tasks \
                       bin/time_log-plot_work_by_day \
