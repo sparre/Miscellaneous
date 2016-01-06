@@ -10,6 +10,7 @@ project Miscellaneous is
 
    for Main use ("mercurial",
                  "binær_fillæser",
+                 "extract_with_clauses",
                  "hex_colours_to_ppm_colour_table",
                  "largest",
                  "ordn_bogliste",
