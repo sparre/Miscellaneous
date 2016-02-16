@@ -28,7 +28,8 @@ procedure Ordn_Filmliste is
                          Spilletid,
                          Pris,
                          Værdi, Noter,
-                         Aldersgrænse, Etiketter);
+                         Aldersgrænse, Etiketter,
+                         URL);
 
    package Entry_Text_IO is new Internet.Headers (Entry_Fields);
 
