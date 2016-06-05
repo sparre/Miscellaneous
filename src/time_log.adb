@@ -12,6 +12,7 @@ package body Time_Log is
             if T.Time_Spent > 0.0 then
                Append (Tasks      => Accumulator,
                        Task_ID    => T.Title,
+                       Comments   => T.Comments,
                        Time_Spent => T.Time_Spent);
             end if;
          end;
@@ -23,20 +24,51 @@ package body Time_Log is
    procedure Append
      (Tasks      : in out Task_Maps.Map;
       Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Comments   : in     Comment_Sets.Set;
       Time_Spent : in     Actual_Duration) is
+      use type Comment_Sets.Set;
       Accumulated : Task_Type;
    begin
       if Tasks.Contains (Task_ID) then
          Accumulated := Tasks.Element (Task_ID);
          Accumulated.Time_Spent := Accumulated.Time_Spent + Time_Spent;
+         Accumulated.Comments   := Accumulated.Comments or Comments;
          Tasks.Replace (Key      => Task_ID,
                         New_Item => Accumulated);
       else
          Tasks.Insert (Key      => Task_ID,
                        New_Item => (Title      => Task_ID,
-                                    Time_Spent => Time_Spent));
+                                    Time_Spent => Time_Spent,
+                                    Comments   => Comments));
       end if;
    end Append;
+
+   procedure Append
+     (Tasks      : in out Task_Maps.Map;
+      Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Comment    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Time_Spent : in     Actual_Duration) is
+      use Ada.Strings.Unbounded;
+      use Comment_Sets;
+   begin
+      if Length (Comment) > 0 then
+         Append (Tasks      => Tasks,
+                 Task_ID    => Task_ID,
+                 Comments   => To_Set (Comment),
+                 Time_Spent => Time_Spent);
+      else
+         Append (Tasks      => Tasks,
+                 Task_ID    => Task_ID,
+                 Comments   => Empty_Set,
+                 Time_Spent => Time_Spent);
+      end if;
+   end Append;
+
+   function Customer (Item : in Task_Type) return String is
+      pragma Unreferenced (Item); --  TO FIX!
+   begin
+      return "ABENA (hard-coded)";
+   end Customer;
 
    function Now return Standard.Time_Of_Day.Instance is
       use Ada.Calendar;

@@ -12,4 +12,7 @@ package Time_Log.Text_IO is
                       Tasks       :    out Task_Maps.Map;
                       End_Of_File :    out Boolean;
                       Last_Line   :    out Line);
+
+   procedure Put (File : in     Ada.Text_IO.File_Type;
+                  Item : in     Comment_Sets.Set);
 end Time_Log.Text_IO;

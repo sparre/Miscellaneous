@@ -17,16 +17,27 @@ package Time_Log is
             when Task_Begin | Task_End =>
                Time    : Time_Of_Day.Instance;
                Task_ID : Ada.Strings.Unbounded.Unbounded_String;
+               Comment : Ada.Strings.Unbounded.Unbounded_String;
          end case;
       end record;
 
    subtype Actual_Duration is Duration range 0.0 .. Duration'Last;
 
-   type Task_Type is
+   package Comment_Sets is
+      new Ada.Containers.Indefinite_Hashed_Sets
+            (Element_Type        => Ada.Strings.Unbounded.Unbounded_String,
+             Hash                => Ada.Strings.Unbounded.Hash,
+             Equivalent_Elements => Ada.Strings.Unbounded."=",
+             "="                 => Ada.Strings.Unbounded."=");
+
+   type Task_Type is tagged
       record
          Title      : Ada.Strings.Unbounded.Unbounded_String;
          Time_Spent : Actual_Duration := 0.0;
+         Comments   : Comment_Sets.Set;
       end record;
+
+   function Customer (Item : in Task_Type) return String;
 
    package Task_Maps is
       new Ada.Containers.Indefinite_Hashed_Maps
@@ -38,6 +49,13 @@ package Time_Log is
    procedure Append
      (Tasks      : in out Task_Maps.Map;
       Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Comments   : in     Comment_Sets.Set;
+      Time_Spent : in     Actual_Duration);
+
+   procedure Append
+     (Tasks      : in out Task_Maps.Map;
+      Task_ID    : in     Ada.Strings.Unbounded.Unbounded_String;
+      Comment    : in     Ada.Strings.Unbounded.Unbounded_String;
       Time_Spent : in     Actual_Duration);
 
    procedure Accumulate (Accumulator : in out Task_Maps.Map;

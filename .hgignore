@@ -33,6 +33,7 @@ obj/*.o
 # Generated executables:
 bin/binær_fillæser
 bin/extract_with_clauses
+bin/generate_daily_timesheet
 bin/hex_colours_to_ppm_colour_table
 bin/largest
 bin/ordn_bogliste
