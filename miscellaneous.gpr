@@ -19,6 +19,7 @@ project Miscellaneous is
                  "ordn_tegneserieliste",
                  "ppm_circular_crop",
                  "randomise_lines",
+                 "sum_af_beløb",
                  "summarise_time_spent_on_tasks",
                  "time_log-plot_work_by_day",
                  "to_binary");

@@ -11,6 +11,7 @@ GENERATED_EXECUTABLES=bin/binær_fillæser \
                       bin/ppm_circular_crop \
                       bin/randomise_lines \
                       bin/summarise_time_spent_on_tasks \
+                      bin/sum_af_beløb \
                       bin/time_log-plot_work_by_day \
                       bin/to_binary
 
