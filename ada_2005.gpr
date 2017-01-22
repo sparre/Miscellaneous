@@ -13,6 +13,7 @@ abstract project Ada_2005 is
         use ("-fstack-check", --  Generate stack checking code (part of Ada)
              "-gnata",        --  Enable assertions            (part of Ada)
              "-gnato",        --  Overflow checking            (part of Ada)
+             "-gnatW8", "-gnatiw",          --  UTF-8 encoded sources
              "-gnatf",                      --  Full, verbose error messages
              "-gnatwa",                     --  All optional warnings
              "-gnatVa",                     --  All validity checks

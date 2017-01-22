@@ -5,14 +5,14 @@ with
 
 procedure Ordn_Bogliste is
    type Entry_Fields is (Titel, Originaltitel,
-                         Forfatter, Oversætter, Redaktør,
+                         Forfatter, OversÃ¦tter, RedaktÃ¸r,
                          Forlag, ISBN,
                          Anskaffelsesdato, Anskaffelsespris,
-                         Udgivelsesår,
+                         UdgivelsesÃ¥r,
                          Sprog,
                          Sidetal,
-                         Pris, Værdi,
-                         Læst, Noter);
+                         Pris, VÃ¦rdi,
+                         LÃ¦st, Noter);
 
    package Entry_Text_IO is new Internet.Headers (Entry_Fields);
 

@@ -1,23 +1,3 @@
-bioinformatics:
-	if [ ! -d bioinformatics ]; then ( rm -f bioinformatics && hg clone https://bitbucket.org/sparre/bioinformatics ); fi
-	rm -f bioinformatics/src/average_expression_level_variance.adb
-
-bioinformatics-update: bioinformatics
-	cd bioinformatics && hg pull && hg update && hg revert --all
-	rm -f bioinformatics/src/average_expression_level_variance.adb
-
-DEPENDENCY_UPDATES += bioinformatics-update
-
-speling.org-tools:
-	if [ ! -d speling.org-tools ]; then ( rm -f speling.org-tools && hg clone https://bitbucket.org/sparre/speling.org-tools ); fi
-	rm -f speling.org-tools/source/{add_translations,læs_sunes_filer,*wordlist*,count_checks,check_words,*cgi_log*,*sortable_log*}.ad?
-
-speling.org-tools-update: speling.org-tools
-	cd speling.org-tools && hg pull && hg update && hg revert --all
-	rm -f speling.org-tools/source/{add_translations,læs_sunes_filer,*wordlist*,count_checks,check_words,*cgi_log*,*sortable_log*}.ad?
-
-DEPENDENCY_UPDATES += speling.org-tools-update
-
 update: $(DEPENDENCY_UPDATES)
 
 .PHONY: $(DEPENDENCY_UPDATES) update

@@ -23,12 +23,12 @@ with
 procedure Ordn_Filmliste is
    type Entry_Fields is (Titel, Originaltitel, Medie,
                          Anskaffelsesdato, Anskaffelsespris,
-                         Instruktør, Produktionsår,
+                         InstruktÃ¸r, ProduktionsÃ¥r,
                          Lyd, Undertekster,
                          Spilletid,
                          Pris,
-                         Værdi, Noter,
-                         Aldersgrænse, Etiketter,
+                         VÃ¦rdi, Noter,
+                         AldersgrÃ¦nse, Etiketter,
                          URL);
 
    package Entry_Text_IO is new Internet.Headers (Entry_Fields);

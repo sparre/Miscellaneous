@@ -1,17 +1,10 @@
 ------------------------------------------------------------------------------
 --
---  procedure Binær_Fillæser (body)
+--  procedure Binary_File_Reader (body)
 --
---  Læser en fil som en tabel med 32-bit C-heltal eller C-decimaltal.
---
-------------------------------------------------------------------------------
---  Opdateringslog:
---
---  2000.10.23 (Jacob Sparre Andersen)
---    Skrevet.
+--  Reads a file as a table of 32-bit C integers or C floats.
 --
 ------------------------------------------------------------------------------
---  Standardpakker:
 
 with Ada.Command_Line;
 with Ada.Direct_IO;
@@ -21,7 +14,7 @@ with Interfaces.C;
 
 ------------------------------------------------------------------------------
 
-procedure Binær_Fillæser is
+procedure Binary_File_Reader is
 
    ---------------------------------------------------------------------------
    --  32-bit data:
@@ -85,18 +78,18 @@ procedure Binær_Fillæser is
    use Heltal_Tekst_IO;
    use Indeks_Tekst_IO;
 
-   Binær_Fil : Data_IO.File_Type;
+   BinÃ¦r_Fil : Data_IO.File_Type;
    Indeks    : Data_IO.Count := 0;
    Data      : Data_32_Bit;
 
-begin --  Binær_Fillæser
-   Open (File => Binær_Fil,
+begin --  Binary_File_Reader
+   Open (File => BinÃ¦r_Fil,
          Name => Ada.Command_Line.Argument (1),
          Mode => In_File);
 
-   while not End_Of_File (File => Binær_Fil) loop
+   while not End_Of_File (File => BinÃ¦r_Fil) loop
       Indeks := Indeks + 1;
-      Read (File => Binær_Fil,
+      Read (File => BinÃ¦r_Fil,
             Item => Data);
 
       Put (File => Standard_Output,
@@ -112,5 +105,5 @@ begin --  Binær_Fillæser
       New_Line (File => Standard_Output);
    end loop;
 
-   Close (File => Binær_Fil);
-end Binær_Fillæser;
+   Close (File => BinÃ¦r_Fil);
+end Binary_File_Reader;
