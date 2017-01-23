@@ -110,7 +110,7 @@ procedure Time_Log.Plot_Work_By_Day is
                T : Task_Type renames Task_Maps.Element (Cursor);
             begin
                if T.Title = +"Frokost" or else
-                  T.Title = +"SkÃ¦rmpause" or else
+                  T.Title = +"Skærmpause" or else
                   T.Title = +"Pause" or else
                   T.Title = +"coop.dk/LEGO"
                then

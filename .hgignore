@@ -31,7 +31,7 @@ obj/*.ali
 obj/*.o
 
 # Generated executables:
-bin/binary_file_reader
+bin/binær_fillæser
 bin/extract_with_clauses
 bin/generate_daily_timesheet
 bin/hex_colours_to_ppm_colour_table
@@ -41,7 +41,7 @@ bin/ordn_filmliste
 bin/ordn_tegneserieliste
 bin/ppm_circular_crop
 bin/randomise_lines
-bin/sum_of_amounts
+bin/sum_af_beløb
 bin/summarise_time_spent_on_tasks
 bin/time_log-plot_work_by_day
 bin/to_binary

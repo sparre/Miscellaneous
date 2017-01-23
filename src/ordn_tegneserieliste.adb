@@ -4,14 +4,14 @@ with
   Internet.Headers;
 
 procedure Ordn_Tegneserieliste is
-   type Entry_Fields is (Serie, Ã…rgang, Nummer, Sprog, Titel, Originaltitel,
+   type Entry_Fields is (Serie, Årgang, Nummer, Sprog, Titel, Originaltitel,
                          Historier,
-                         Forfatter, Tegner, FarvelÃ¦gger,
-                         OversÃ¦tter, Tekstning, Kunstnere,
+                         Forfatter, Tegner, Farvelægger,
+                         Oversætter, Tekstning, Kunstnere,
                          Udgave, Oplag,
-                         Sidetal, Pris, Forlag, ISBN, UdgivelsesÃ¥r,
+                         Sidetal, Pris, Forlag, ISBN, Udgivelsesår,
                          Anskaffelsesdato, Anskaffelsespris,
-                         Samlinger, VÃ¦rdi, Noter);
+                         Samlinger, Værdi, Noter);
 
    package Entry_Text_IO is new Internet.Headers (Entry_Fields);
 

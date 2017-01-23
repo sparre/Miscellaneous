@@ -1,6 +1,6 @@
 PROJECT=miscellaneous
 
-GENERATED_EXECUTABLES=bin/binary_file_reader \
+GENERATED_EXECUTABLES=bin/binær_fillæser \
                       bin/extract_with_clauses \
                       bin/generate_daily_timesheet \
                       bin/hex_colours_to_ppm_colour_table \
@@ -11,11 +11,12 @@ GENERATED_EXECUTABLES=bin/binary_file_reader \
                       bin/ppm_circular_crop \
                       bin/randomise_lines \
                       bin/summarise_time_spent_on_tasks \
-                      bin/sum_of_amounts \
+                      bin/sum_af_beløb \
                       bin/time_log-plot_work_by_day \
                       bin/to_binary
 
-GENERATED_SOURCES=
+GENERATED_SOURCES=bioinformatics \
+                  speling.org-tools
 
 SCRIPTS=
 

@@ -40,7 +40,7 @@ procedure Generate_Daily_Timesheet is
       Put_Month (Standard_Output, Date => Date);
       Put_Name  (Standard_Output);
       New_Line  (Standard_Output);
-      Put_Line  (Standard_Output, "Dato/Kunde/Opgave/Tid/BemÃ¦rkning");
+      Put_Line  (Standard_Output, "Dato/Kunde/Opgave/Tid/Bemærkning");
       New_Line  (Standard_Output);
    end Put_Header;
 
