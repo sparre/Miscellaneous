@@ -1,6 +1,6 @@
 --  O mighty Emacs, please use -*- Ada -*- mode in this lowly file.
 
-with "ada_2005";
+with "ada_2012";
 with "florist";
 
 project Miscellaneous is
@@ -24,8 +24,8 @@ project Miscellaneous is
                  "time_log-plot_work_by_day",
                  "to_binary");
 
-   package Builder  renames Ada_2005.Builder;
-   package Compiler renames Ada_2005.Compiler;
+   package Builder  renames Ada_2012.Builder;
+   package Compiler renames Ada_2012.Compiler;
 
    for Object_Dir use "obj/";
    for Exec_Dir   use "bin/";

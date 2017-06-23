@@ -1,7 +1,6 @@
-with Ada.Containers.Indefinite_Hashed_Maps,
-     Ada.Containers.Indefinite_Hashed_Sets,
-     Ada.Strings.Unbounded,
-     Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Indefinite_Ordered_Maps,
+     Ada.Containers.Indefinite_Ordered_Sets,
+     Ada.Strings.Unbounded;
 
 with Date,
      Time_Of_Day;
@@ -24,11 +23,10 @@ package Time_Log is
    subtype Actual_Duration is Duration range 0.0 .. Duration'Last;
 
    package Comment_Sets is
-      new Ada.Containers.Indefinite_Hashed_Sets
+      new Ada.Containers.Indefinite_Ordered_Sets
             (Element_Type        => Ada.Strings.Unbounded.Unbounded_String,
-             Hash                => Ada.Strings.Unbounded.Hash,
-             Equivalent_Elements => Ada.Strings.Unbounded."=",
-             "="                 => Ada.Strings.Unbounded."=");
+             "="                 => Ada.Strings.Unbounded."=",
+             "<"                 => Ada.Strings.Unbounded."<");
 
    type Task_Type is tagged
       record
@@ -40,11 +38,10 @@ package Time_Log is
    function Customer (Item : in Task_Type) return String;
 
    package Task_Maps is
-      new Ada.Containers.Indefinite_Hashed_Maps
+      new Ada.Containers.Indefinite_Ordered_Maps
             (Key_Type        => Ada.Strings.Unbounded.Unbounded_String,
              Element_Type    => Task_Type,
-             Hash            => Ada.Strings.Unbounded.Hash,
-             Equivalent_Keys => Ada.Strings.Unbounded."=");
+             "<"             => Ada.Strings.Unbounded."<");
 
    procedure Append
      (Tasks      : in out Task_Maps.Map;
@@ -62,11 +59,10 @@ package Time_Log is
                          New_Items   : in     Task_Maps.Map);
 
    package Tag_Sets is
-      new Ada.Containers.Indefinite_Hashed_Sets
+      new Ada.Containers.Indefinite_Ordered_Sets
             (Element_Type        => Ada.Strings.Unbounded.Unbounded_String,
-             Hash                => Ada.Strings.Unbounded.Hash,
-             Equivalent_Elements => Ada.Strings.Unbounded."=",
-             "="                 => Ada.Strings.Unbounded."=");
+             "="                 => Ada.Strings.Unbounded."=",
+             "<"                 => Ada.Strings.Unbounded."<");
 
    function Weekend (Date : in Standard.Date.Instance) return Boolean;
    function Workday (Tags : in Tag_Sets.Set) return Boolean;

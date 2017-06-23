@@ -10,12 +10,12 @@ EXECUTABLES=$(GENERATED_EXECUTABLES) $(SCRIPTS)
 
 PREFIX ?= $(HOME)
 
-all: build metrics
+all: build
 
 build: fix-whitespace $(GENERATED_SOURCES)
 	gnatmake -p -P $(PROJECT)
 
-test: build metrics
+test: build
 	@mkdir -p tests/results
 	@./tests/build
 	@./tests/run
@@ -43,9 +43,6 @@ distclean: clean
 fix-whitespace:
 	@find src tests -name '*.ad?' | xargs egrep -l '	| $$' | grep -v '^b[~]' | xargs perl -i -lpe 's|	|        |g; s| +$$||g' 2>/dev/null || true
 
-metrics:
-	@gnat metric -P $(PROJECT)
-
 $(HG_STATE_SOURCE): Makefile .hg/hgrc .hg/dirstate
 	@echo 'package Mercurial is'                                 >  $(HG_STATE_SOURCE)
 	@echo '   Revision : constant String (1 .. 53) :='           >> $(HG_STATE_SOURCE)
@@ -54,4 +51,4 @@ $(HG_STATE_SOURCE): Makefile .hg/hgrc .hg/dirstate
 
 -include Makefile.project_rules
 
-.PHONY: all build test install clean distclean fix-whitespace metrics
+.PHONY: all build test install clean distclean fix-whitespace
