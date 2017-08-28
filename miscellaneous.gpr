@@ -9,6 +9,8 @@ project Miscellaneous is
                         "bioinformatics/src/");
 
    for Main use ("mercurial",
+                 "main.adb",
+                 "caesar",
                  "binær_fillæser",
                  "extract_with_clauses",
                  "generate_daily_timesheet",

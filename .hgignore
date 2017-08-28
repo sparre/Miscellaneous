@@ -32,10 +32,12 @@ obj/*.o
 
 # Generated executables:
 bin/binær_fillæser
+bin/caesar
 bin/extract_with_clauses
 bin/generate_daily_timesheet
 bin/hex_colours_to_ppm_colour_table
 bin/largest
+bin/main
 bin/ordn_bogliste
 bin/ordn_filmliste
 bin/ordn_tegneserieliste
